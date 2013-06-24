@@ -10,8 +10,7 @@
     "dependencies": {},
     "devDependencies": {
         "mocha": "*",
-        "chai": "*",
-        "sinon": "*"
+        "chai": "*"
     },
     "files": [
         "index.js"

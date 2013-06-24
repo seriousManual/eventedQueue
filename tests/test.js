@@ -1,94 +1,89 @@
-//var eventedQueue = require('../');
-//
-//module.exports['eventedQueue'] = function(test) {
-//    var callOrder = []
-//        , numberCalled = 0
-//        , eq = eventedQueue(false);
-//
-//    var testFunction = function(nr, time) {
-//        setTimeout(function() {
-//            callOrder.push(nr);
-//
-//            numberCalled++;
-//
-//            if (numberCalled == 6) {
-//                test.same(callOrder, ['task2', 'task1', 'task4', 'task3', 'task5', 'task6']);
-//                test.done();
-//            }
-//
-//        }, time);
-//    };
-//
-//    eq.push(testFunction, 'task1', 20);
-//    eq.push(testFunction, 'task2', 10);
-//    eq.push(testFunction, 'task3', 40);
-//    eq.push(testFunction, 'task4', 30);
-//
-//    test.equal(eq.length(), 4);
-//    test.equal(numberCalled, 0);
-//
-//    setTimeout(function() {
-//        test.equal(eq.length(), 4);
-//        test.equal(numberCalled, 0);
-//
-//        eq.trigger();
-//
-//        eq.push(testFunction, 'task5', 100);
-//        eq.push(testFunction, 'task6', 120);
-//    }, 50);
-//};
-//
-//module.exports['eventedQueue relock'] = function(test) {
-//
-//    var callOrder = []
-//        , numberCalled = 0
-//        , eq = eventedQueue(false);
-//
-//    var testFunction = function(nr, time) {
-//        setTimeout(function() {
-//            callOrder.push(nr);
-//
-//            numberCalled++;
-//
-//            if (numberCalled == 6) {
-//                test.same(callOrder, ['task2', 'task1', 'task4', 'task3', 'task5', 'task6']);
-//            }
-//
-//            if (numberCalled == 7 || numberCalled == 8) {
-//                test.ok(false, 'should not be could due to relocking');
-//            }
-//
-//        }, time);
-//    };
-//
-//    eq.push(testFunction, 'task1', 20);
-//    eq.push(testFunction, 'task2', 10);
-//    eq.push(testFunction, 'task3', 40);
-//    eq.push(testFunction, 'task4', 30);
-//
-//    test.equal(eq.length(), 4);
-//    test.equal(numberCalled, 0);
-//
-//    setTimeout(function() {
-//        test.equal(eq.length(), 4);
-//        test.equal(numberCalled, 0);
-//
-//        eq.trigger();
-//
-//        eq.push(testFunction, 'task5', 60);
-//        eq.push(testFunction, 'task6', 80);
-//
-//        eq.relock();
-//
-//        eq.push(testFunction, 'task7', 100);
-//        eq.push(testFunction, 'task8', 120);
-//    }, 50);
-//
-//    setTimeout(function() {
-//        test.equal(eq.length(), 2);
-//        test.done();
-//    }, 200);
-//};
+var expect = require('chai').expect;
+
+var eventedQueue = require('../');
+
+describe('eventedQueue', function() {
+    it('should work in order without relocking', function(done) {
+        var callOrder = [];
+        var numberCalled = 0;
+        var eq = eventedQueue(false);
+
+        var testFunction = function(nr, time) {
+            setTimeout(function() {
+                callOrder.push(nr);
+
+                numberCalled++;
+            }, time);
+        };
+
+        eq.push(testFunction, 'task1', 20);
+        eq.push(testFunction, 'task2', 10);
+        eq.push(testFunction, 'task3', 40);
+        eq.push(testFunction, 'task4', 30);
+
+        expect(eq.length()).to.equal(4);
+        expect(numberCalled).to.equal(0);
+
+        setTimeout(function() {
+            eq.trigger();
+
+            eq.push(testFunction, 'task5', 100);
+            eq.push(testFunction, 'task6', 120);
+        }, 50);
+
+        setTimeout(function() {
+            expect(callOrder).to.deep.equal(['task2', 'task1', 'task4', 'task3', 'task5', 'task6']);
+            done();
+        }, 200);
+    });
+
+    it('should work in order with relocking', function(done) {
+        var callOrder = [];
+        var numberCalled = 0;
+        var eq = eventedQueue(false);
+
+        var testFunction = function(nr, time) {
+            setTimeout(function() {
+                callOrder.push(nr);
+
+                numberCalled++;
+            }, time);
+        };
+
+        eq.push(testFunction, 'task1', 20);
+        eq.push(testFunction, 'task2', 10);
+        eq.push(testFunction, 'task3', 30);
+        eq.push(testFunction, 'task4', 40);
+
+        expect(eq.length()).to.equal(4);
+        expect(numberCalled).to.equal(0);
+
+        setTimeout(function() {
+            expect(eq.length()).to.equal(4);
+            expect(numberCalled).to.equal(0);
+
+            eq.trigger();
+
+            eq.push(testFunction, 'task5', 50);
+            eq.push(testFunction, 'task6', 60);
+
+            eq.relock();
+
+            eq.push(testFunction, 'task7', 10);
+            eq.push(testFunction, 'task8', 20);
+        }, 50);
+
+        setTimeout(function() {
+            expect(numberCalled).to.equal(6);
+            expect(eq.length()).to.equal(2);
+            expect(callOrder).to.deep.equal(['task2', 'task1', 'task3', 'task4', 'task5', 'task6']);
+
+            done();
+        }, 300);
+    });
+});
+
+
 //
 //module.exports['eventedQueue relock retrigger'] = function(test) {
 //
