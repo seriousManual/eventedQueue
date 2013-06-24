@@ -16,9 +16,7 @@ var eventedQueue = function(autoRelock) {
                 }
 
                 if (triggered) {
-                    async.nextTick(function() {
-                        args.shift().apply(null, args);
-                    });
+                    args.shift().apply(null, args);
                 } else {
                     triggerQueue.push({ f: args.shift(), args: args });
                 }
