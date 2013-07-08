@@ -1,7 +1,7 @@
 {
     "name": "eventedqueue",
     "description": "eventqueue that accepts event handlers that get fired on a certain events. supports the supplementary invocation of event handlers that are bound after the event has been fired",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "repository": {
         "type": "git",
         "url": "https://github.com/zaphod1984/eventedQueue"
