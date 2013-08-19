@@ -1,5 +1,5 @@
 # eventedQueue
 
-[![NPM version](https://badge.fury.io/js/eventedqueue.png)](http://badge.fury.io/js/eventedqueue)
+[![NPM](https://nodei.co/npm/eventedqueue.png)](https://nodei.co/npm/eventedqueue/)
 
 work in progress...
