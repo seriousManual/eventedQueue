@@ -205,7 +205,7 @@ describe('EventedQueue', function() {
     });
 
     it('should throw', function() {
-        var eq = eventedQueue();
+        var eq = new EventedQueue();
 
         expect(function() {
             eq.push()
