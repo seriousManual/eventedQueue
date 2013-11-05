@@ -1,7 +1,7 @@
-var eventedQueue = require('../');
+var EventedQueue = require('../');
 
 function DbAbstraction() {
-    this._eq = new eventedQueue(false);
+    this._eq = new EventedQueue(false);
 
     this._init();
 }

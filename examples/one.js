@@ -1,29 +1,15 @@
-var eq = require('../');
+var EventedQueue = require('../');
 
-var myEq = eq(true);
+var myQueue = new EventedQueue(true);
 
-myEq.push(function() {
-    console.log( 'ola0' );
-});
+var job = function(name) {
+    console.log('job ' + name + ' executed');
+};
 
-myEq.push(function() {
-    console.log( 'ola1' );
-});
-
-myEq.push(function() {
-    console.log( 'ola2' );
-});
+myQueue.push(job, 'foo');
+myQueue.push(job, 'bar');
+myQueue.push(job, 'bax');
 
 setTimeout(function() {
-    myEq.trigger();
+    myQueue.trigger();
 }, 1000);
-
-setTimeout(function() {
-    myEq.push(function() {
-        console.log( 'ola3' );
-    });
-}, 2000);
-
-setTimeout(function() {
-    myEq.trigger();
-}, 2500);

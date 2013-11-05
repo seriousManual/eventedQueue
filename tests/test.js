@@ -1,12 +1,12 @@
 var expect = require('chai').expect;
 
-var eventedQueue = require('../');
+var EventedQueue = require('../index');
 
-describe('eventedQueue', function() {
+describe('EventedQueue', function() {
     it('should work in order without relocking', function(done) {
         var callOrder = [];
         var numberCalled = 0;
-        var eq = eventedQueue(false);
+        var eq = new EventedQueue(false);
 
         var testFunction = function(nr, time) {
             setTimeout(function() {
@@ -40,7 +40,7 @@ describe('eventedQueue', function() {
     it('should work in order with relocking', function(done) {
         var callOrder = [];
         var numberCalled = 0;
-        var eq = eventedQueue(false);
+        var eq = new EventedQueue(false);
 
         var testFunction = function(nr, time) {
             setTimeout(function() {
@@ -85,7 +85,7 @@ describe('eventedQueue', function() {
     it('should accept a retrigger after locking', function(done) {
         var callOrder = [];
         var numberCalled = 0;
-        var eq = eventedQueue(false);
+        var eq = new EventedQueue(false);
 
         var testFunction = function(nr, time) {
             setTimeout(function() {
@@ -137,7 +137,7 @@ describe('eventedQueue', function() {
     it('should relock the queue automatically', function(done) {
         var callOrder = [];
         var numberCalled = 0;
-        var eq = eventedQueue(true); //<--- setting default behaviour to relock after trigger
+        var eq = new EventedQueue(true); //<--- setting default behaviour to relock after trigger
 
         var testFunction = function(nr, time) {
             setTimeout(function() {
@@ -177,7 +177,7 @@ describe('eventedQueue', function() {
     it('should call empty', function(done) {
         var callOrder = [];
         var numberCalled = 0;
-        var eq = eventedQueue(); //<--- setting default behaviour to relock after trigger
+        var eq = new EventedQueue(); //<--- setting default behaviour to relock after trigger
 
         eq.empty = function() {
             done();

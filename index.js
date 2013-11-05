@@ -69,7 +69,4 @@ EventedQueue.prototype.size = function() {
     return this._triggerQueue.length;
 };
 
-
-module.exports = function(autoRelock) {
-    return new EventedQueue(autoRelock);
-};
+module.exports = EventedQueue;
