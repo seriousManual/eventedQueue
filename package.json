@@ -1,23 +1,28 @@
 {
-    "name": "eventedqueue",
-    "description": "eventqueue that accepts event handlers that get fired on a certain events. supports the supplementary invocation of event handlers that are bound after the event has been fired",
-    "version": "0.0.5",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/zaphod1984/eventedQueue"
-    },
-    "author": "Manuel Ernst <zaphod84@gmx.de>",
-    "dependencies": {},
-    "devDependencies": {
-        "mocha": "*",
-        "chai": "*"
-    },
-    "keywords": ["events", "queue", "queued calls", "trigger"],
-    "files": [
-        "index.js"
-    ],
-    "main": "./index.js",
-    "scripts": {
-        "test": "./node_modules/mocha/bin/mocha tests"
-    }
+  "name": "eventedqueue",
+  "description": "eventqueue that accepts event handlers that get fired on a certain events. supports the supplementary invocation of event handlers that are bound after the event has been fired",
+  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zaphod1984/eventedQueue"
+  },
+  "author": "Manuel Ernst <zaphod84@gmx.de>",
+  "dependencies": {},
+  "devDependencies": {
+    "mocha": "*",
+    "chai": "*"
+  },
+  "keywords": [
+    "events",
+    "queue",
+    "queued calls",
+    "trigger"
+  ],
+  "files": [
+    "index.js"
+  ],
+  "main": "./index.js",
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha tests"
+  }
 }
