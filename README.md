@@ -1,6 +1,6 @@
 # eventedQueue
 
-[![Build Status](https://travis-ci.org/zaphod1984/node-piglow.png)](https://travis-ci.org/zaphod1984/node-piglow)
+[![Build Status](https://travis-ci.org/zaphod1984/eventedQueue.png)](https://travis-ci.org/zaphod1984/eventedQueue)
 
 [![NPM](https://nodei.co/npm/eventedqueue.png)](https://nodei.co/npm/eventedqueue/)
 
