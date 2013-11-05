@@ -16,7 +16,8 @@
     "events",
     "queue",
     "queued calls",
-    "trigger"
+    "trigger",
+    "job queue"
   ],
   "files": [
     "index.js"
