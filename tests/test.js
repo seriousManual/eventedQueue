@@ -4,37 +4,34 @@ var EventedQueue = require('../index');
 
 describe('EventedQueue', function() {
     it('should work in order without relocking', function(done) {
+        this.timeout(3000);
+
         var callOrder = [];
         var numberCalled = 0;
         var eq = new EventedQueue(false);
 
-        var testFunction = function(nr, time) {
-            setTimeout(function() {
-                callOrder.push(nr);
+        var testFunction = function(nr) {
+            callOrder.push(nr);
 
-                numberCalled++;
-            }, time);
+            numberCalled++;
         };
 
-        eq.push(testFunction, 'task1', 20);
-        eq.push(testFunction, 'task2', 10);
-        eq.push(testFunction, 'task3', 40);
-        eq.push(testFunction, 'task4', 30);
+        eq.push(testFunction, 'task1');
+        eq.push(testFunction, 'task2');
+        eq.push(testFunction, 'task3');
+        eq.push(testFunction, 'task4');
 
         expect(eq.size()).to.equal(4);
         expect(numberCalled).to.equal(0);
 
-        setTimeout(function() {
-            eq.trigger();
+        eq.trigger();
 
-            eq.push(testFunction, 'task5', 100);
-            eq.push(testFunction, 'task6', 120);
-        }, 50);
+        eq.push(testFunction, 'task5');
+        eq.push(testFunction, 'task6');
 
-        setTimeout(function() {
-            expect(callOrder).to.deep.equal(['task2', 'task1', 'task4', 'task3', 'task5', 'task6']);
-            done();
-        }, 200);
+        expect(callOrder).to.deep.equal(['task1', 'task2', 'task3', 'task4', 'task5', 'task6']);
+        expect(numberCalled).to.equal(6);
+        done();
     });
 
     it('should work in order with relocking', function(done) {
@@ -42,44 +39,38 @@ describe('EventedQueue', function() {
         var numberCalled = 0;
         var eq = new EventedQueue(false);
 
-        var testFunction = function(nr, time) {
-            setTimeout(function() {
-                callOrder.push(nr);
+        var testFunction = function(nr) {
+            callOrder.push(nr);
 
-                numberCalled++;
-            }, time);
+            numberCalled++;
         };
 
-        eq.push(testFunction, 'task1', 20);
-        eq.push(testFunction, 'task2', 10);
-        eq.push(testFunction, 'task3', 30);
-        eq.push(testFunction, 'task4', 40);
+        eq.push(testFunction, 'task1');
+        eq.push(testFunction, 'task2');
+        eq.push(testFunction, 'task3');
+        eq.push(testFunction, 'task4');
 
         expect(eq.size()).to.equal(4);
         expect(numberCalled).to.equal(0);
 
-        setTimeout(function() {
-            expect(eq.size()).to.equal(4);
-            expect(numberCalled).to.equal(0);
+        eq.trigger();
 
-            eq.trigger();
+        eq.push(testFunction, 'task5');
+        eq.push(testFunction, 'task6');
 
-            eq.push(testFunction, 'task5', 50);
-            eq.push(testFunction, 'task6', 60);
+        expect(numberCalled).to.equal(6);
+        expect(eq.size()).to.equal(0);
 
-            eq.relock();
+        eq.relock();
 
-            eq.push(testFunction, 'task7', 10);
-            eq.push(testFunction, 'task8', 20);
-        }, 50);
+        eq.push(testFunction, 'task7');
+        eq.push(testFunction, 'task8');
 
-        setTimeout(function() {
-            expect(numberCalled).to.equal(6);
-            expect(eq.size()).to.equal(2);
-            expect(callOrder).to.deep.equal(['task2', 'task1', 'task3', 'task4', 'task5', 'task6']);
+        expect(numberCalled).to.equal(6);
+        expect(eq.size()).to.equal(2);
+        expect(callOrder).to.deep.equal(['task1', 'task2', 'task3', 'task4', 'task5', 'task6']);
 
-            done();
-        }, 300);
+        done();
     });
 
     it('should accept a retrigger after locking', function(done) {
@@ -88,50 +79,43 @@ describe('EventedQueue', function() {
         var eq = new EventedQueue(false);
 
         var testFunction = function(nr, time) {
-            setTimeout(function() {
-                callOrder.push(nr);
+            callOrder.push(nr);
 
-                numberCalled++;
-            }, time);
+            numberCalled++;
         };
 
-        eq.push(testFunction, 'task1', 4);
-        eq.push(testFunction, 'task2', 3);
-        eq.push(testFunction, 'task3', 2);
-        eq.push(testFunction, 'task4', 1);
+        eq.push(testFunction, 'task1');
+        eq.push(testFunction, 'task2');
+        eq.push(testFunction, 'task3');
+        eq.push(testFunction, 'task4');
 
         expect(eq.size()).to.equal(4);
         expect(numberCalled).to.equal(0);
 
-        setTimeout(function() {
-            expect(eq.size()).to.equal(4);
-            expect(numberCalled).to.equal(0);
+        eq.trigger();
 
-            eq.trigger();
+        eq.push(testFunction, 'task5');
+        eq.push(testFunction, 'task6');
 
-            eq.push(testFunction, 'task5', 10);
-            eq.push(testFunction, 'task6', 20);
+        expect(eq.size()).to.equal(0);
+        expect(numberCalled).to.equal(6);
 
-            eq.relock();
+        eq.relock();
 
-            eq.push(testFunction, 'task7', 20);
-            eq.push(testFunction, 'task8', 10);
+        eq.push(testFunction, 'task7');
+        eq.push(testFunction, 'task8');
 
-            setTimeout(function() {
-                expect(eq.size()).to.equal(2);
-                expect(numberCalled).to.equal(6);
-                expect(callOrder).to.deep.equal([ 'task4', 'task3', 'task2', 'task1', 'task5', 'task6' ]);
+        expect(eq.size()).to.equal(2);
+        expect(numberCalled).to.equal(6);
+        expect(callOrder).to.deep.equal([ 'task1', 'task2', 'task3', 'task4', 'task5', 'task6' ]);
 
-                eq.trigger();
+        eq.trigger();
 
-                setTimeout(function() {
-                    expect(eq.size()).to.equal(0);
-                    expect(numberCalled).to.equal(8);
-                    expect(callOrder).to.deep.equal([ 'task4', 'task3', 'task2', 'task1', 'task5', 'task6', 'task8', 'task7' ]);
-                    done();
-                }, 60);
-            }, 100);
-        }, 50);
+        expect(eq.size()).to.equal(0);
+        expect(numberCalled).to.equal(8);
+        expect(callOrder).to.deep.equal([ 'task1', 'task2', 'task3', 'task4', 'task5', 'task6', 'task7', 'task8' ]);
+
+        done();
     });
 
     it('should relock the queue automatically', function(done) {
@@ -139,39 +123,34 @@ describe('EventedQueue', function() {
         var numberCalled = 0;
         var eq = new EventedQueue(true); //<--- setting default behaviour to relock after trigger
 
-        var testFunction = function(nr, time) {
-            setTimeout(function() {
-                callOrder.push(nr);
+        var testFunction = function(nr) {
+            callOrder.push(nr);
 
-                numberCalled++;
-            }, time);
+            numberCalled++;
         };
 
-        eq.push(testFunction, 'task1', 20);
-        eq.push(testFunction, 'task2', 10);
-        eq.push(testFunction, 'task3', 40);
-        eq.push(testFunction, 'task4', 30);
+        eq.push(testFunction, 'task1');
+        eq.push(testFunction, 'task2');
+        eq.push(testFunction, 'task3');
+        eq.push(testFunction, 'task4');
 
         expect(eq.size()).to.equal(4);
         expect(numberCalled).to.equal(0);
 
         eq.trigger();
 
-        setTimeout(function() {
-            expect(eq.size()).to.equal(0);
-            expect(numberCalled).to.equal(4);
-            expect(callOrder).to.deep.equal(['task2', 'task1', 'task4', 'task3']);
+        expect(eq.size()).to.equal(0);
+        expect(numberCalled).to.equal(4);
+        expect(callOrder).to.deep.equal(['task1', 'task2', 'task3', 'task4']);
 
-            eq.push(testFunction, 'task5', 10);
-            eq.push(testFunction, 'task6', 20);
+        eq.push(testFunction, 'task5');
+        eq.push(testFunction, 'task6');
 
-            expect(eq.size()).to.equal(2);
-            expect(numberCalled).to.equal(4);
-            expect(callOrder).to.deep.equal(['task2', 'task1', 'task4', 'task3']);
+        expect(eq.size()).to.equal(2);
+        expect(numberCalled).to.equal(4);
+        expect(callOrder).to.deep.equal(['task1', 'task2', 'task3', 'task4']);
 
-            done();
-        }, 80);
-
+        done();
     });
 
     it('should call empty', function(done) {
@@ -183,25 +162,21 @@ describe('EventedQueue', function() {
             done();
         };
 
-        var testFunction = function(nr, time) {
-            setTimeout(function() {
-                callOrder.push(nr);
+        var testFunction = function(nr) {
+            callOrder.push(nr);
 
-                numberCalled++;
-            }, time);
+            numberCalled++;
         };
 
-        eq.push(testFunction, 'task1', 20);
-        eq.push(testFunction, 'task2', 10);
-        eq.push(testFunction, 'task3', 40);
-        eq.push(testFunction, 'task4', 30);
+        eq.push(testFunction, 'task1');
+        eq.push(testFunction, 'task2');
+        eq.push(testFunction, 'task3');
+        eq.push(testFunction, 'task4');
 
         expect(eq.size()).to.equal(4);
         expect(numberCalled).to.equal(0);
 
-        setTimeout(function() {
-            eq.trigger();
-        }, 20);
+        eq.trigger();
     });
 
     it('should throw', function() {
