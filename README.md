@@ -12,7 +12,7 @@ When the queue is triggered, the jobs will be executed.
 ## Example
 
 ````javascript
-var EventedQueue = require('../');
+var EventedQueue = require('eventedqueue');
 
 var myQueue = EventedQueue();
 
