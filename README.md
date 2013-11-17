@@ -17,7 +17,7 @@ var EventedQueue = require('eventedqueue');
 var myQueue = EventedQueue();
 
 var job = function(name) {
-    console.log('job ' + name + ' executed');
+    console.log('job "' + name + '" executed');
 };
 
 myQueue.push(job, 'foo');
@@ -27,6 +27,14 @@ myQueue.push(job, 'bax');
 setTimeout(function() {
     myQueue.trigger();
 }, 1000);
+
+/*
+output:
+
+job "foo" executed
+job "bar" executed
+job "bax" executed
+*/
 
 ````
 
