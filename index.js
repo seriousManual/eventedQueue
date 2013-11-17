@@ -23,7 +23,7 @@ EventedQueue.prototype.push = function() {
 
     if (args.length > 0) {
         if ('function' !== typeof args[0]) {
-            throw new Error('first parameter should be a function');
+            throw new Error('first parameter has to be a function');
         }
 
         if (this._triggered) {
@@ -32,7 +32,7 @@ EventedQueue.prototype.push = function() {
             this._triggerQueue.push({ f: args.shift(), args: args });
         }
     } else {
-        throw new Error('not function argument supplied!');
+        throw new Error('job argument is missing');
     }
 };
 
