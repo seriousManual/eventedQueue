@@ -1,6 +1,4 @@
-# eventedQueue
-
-[![Build Status](https://travis-ci.org/zaphod1984/eventedQueue.png)](https://travis-ci.org/zaphod1984/eventedQueue)
+# eventedQueue [![Build Status](https://travis-ci.org/zaphod1984/eventedQueue.png)](https://travis-ci.org/zaphod1984/eventedQueue)
 
 [![NPM](https://nodei.co/npm/eventedqueue.png)](https://nodei.co/npm/eventedqueue/)
 
@@ -8,6 +6,12 @@
 
 The eventedQueue collects jobs in the form of callbacks supplied with an arbitrary number of arguments.
 When the queue is triggered, the jobs will be executed.
+
+## Installation 
+
+````bash
+$ npm install eventedqueue
+````
 
 ## Example
 
